@@ -47,6 +47,9 @@ struct ConverterTool: ParsableCommand {
     @Option(name: [.customShort("f"), .long], help: "Advanced blocking output format.")
     var advancedBlockingFormat = "json"
 
+    @Option(name: [.customShort("O"), .long], help: "Output JSON filename.")
+    var outputJson = "blockerList.json"
+
     @Argument(help: "Reads rules from standard input.")
     var rules: String?
 
@@ -88,9 +91,17 @@ struct ConverterTool: ParsableCommand {
 
         Logger.log("(ConverterTool) - Conversion done.")
 
-        let encoded = try encodeJson(result)
+        writeToStdOut(str: "Total ConvertedCount Count: \(result.totalConvertedCount)\n")
+        writeToStdOut(str: "Errors Count: \(result.errorsCount)\n")
+        writeToStdOut(str: "Converted Count: \(result.convertedCount)\n")
+        writeToStdOut(str: "Advanced Blocking Converted Count: \(result.advancedBlockingConvertedCount)\n")
+        writeToStdOut(str: "Over Limit: \(result.overLimit)\n")
+        writeToStdOut(str: "\(result.message)\n")
 
-        writeToStdOut(str: "\(encoded)")
+        let outputPath = FileManager.default.currentDirectoryPath + "/" + outputJson
+        writeToStdOut(str: "JSON Output: \(outputPath)\n")
+        let outputURL = URL(string: "file://" + outputPath)!
+        try result.converted.write(to: outputURL, atomically: true, encoding: .utf8)
     }
 }
 
