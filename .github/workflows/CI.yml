@@ -47,6 +47,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./.build/release/ConverterTool
+          asset_path: .build/apple/Products/Release/ConverterTool
           asset_name: ConverterTool.Darwin
           asset_content_type: application/macbinary
